@@ -1,0 +1,319 @@
+declare
+fun{AplicarMovimientos S Ms}
+  case Ms of H|T then
+      S|{AplicarMovimientos {AplicarMovimiento S H}  T}
+   else
+declare
+fun{AplicarMovimientos S Ms}
+  case Ms of H|T then
+      S|{AplicarMovimientos {AplicarMovimiento S H}  T}
+   else
+      S|nil
+   end
+end   
+fun{AplicarMovimiento S M} Trayecto LPrincipal LUno LDos NEstado in
+   Trayecto={Label M}%Captura la etiqueta del movimiento (uno o dos)
+   NEstado=estado(principal:
+LPrincipal  uno:LUno  dos:LDos)%Nuevo estado sin ligar
+   if Trayecto==uno then
+      LDos=S.dos %Se liga la lista del tren 2 puesto que no sufre cambios
+      if M.1<0 then    
+         %{Browse trayecto_uno_a_principal}
+     LPrincipal={MoveLeft S.principal S.uno LUno  ~M.1}
+      elseif M.1>0 then
+         %{Browse trayecto_principal_a_uno}
+     LUno={MoveRight S.principal S.uno LPrincipal M.1}
+      else NEstado=S %Para el caso del 0
+      end    
+   end
+   if Trayecto==dos then
+      LUno=S.uno %Se liga la lista del tren 1 puesto que no sufre cambios
+      if M.1<0 then    
+         %{Browse trayecto_dos_a_principal}
+     LPrincipal={MoveLeft S.principal S.dos LDos  ~M.1}
+      elseif M.1>0 then
+         %{Browse trayecto_principal_a_dos}
+     LDos={MoveRight S.principal S.dos LPrincipal M.1}
+      else NEstado=S %Para el caso del 0
+      end    
+   end   
+   NEstado %X es la variable con el nuevo estado  
+end
+fun {MoveLeft L1 L2 LAux M} L R in
+   L={Mover L1 L2 M LAux}
+   R={Append L1 L}
+end
+fun {Mover L1 L2 M LAux}
+   if M>0 then
+      case L2 of H|T then
+     H|{Mover L1 T M-1 LAux}
+      else
+     LAux=nil
+     nil
+      end
+   else
+      LAux=L2
+      nil      
+   end
+end
+fun {MoveRight L1 L2 LAux M } L Lo R Aux in   
+   L={Reverse L1}
+   Lo={Mover L2 L M Aux}  
+   LAux={Reverse Aux}
+   R={Append {Reverse Lo} L2}
+end
+fun {IterReverse Rs Ys}
+   case Ys of nil then Rs
+   [] Y|Yr then {IterReverse Y|Rs Yr}
+   end
+end
+fun {Reverse Xs}
+   {IterReverse nil Xs}
+end
+fun{TamanoL L}   
+   fun{Tam L N}
+      case L of nil then N
+      []H|T then {Tam T N+1}
+      end         
+   end
+in
+   {Tam L 0}
+end
+fun{Encontrar Tinicial Tfinal} Einicial Efinal N E X  L1 L2 L3 in
+   Einicial=estado(principal:Tinicial uno:nil dos:nil)
+   Efinal=estado(principal:Tfinal uno:nil dos:nil)
+   N={TamanoL Einicial.principal}
+   E={AplicarMovimiento Einicial uno(N)}
+   L1={Append nil [uno(N)]}%ESTA ES LA PRIMERA INSTRUCCIÓN PASAR TODO DE PRINCIPAL A UNO
+   X={IterarTrenes E {Reverse Efinal.principal} L1}
+   L2={Append L1 X}   
+   L3={Append L2 [dos(~N)]}%ESTA ES LA ULTIMA INSTRUCCIÓN PASAR TODO DE DOS A PRINCIPAL
+end
+fun{IterarTrenes Einicial TrenFinal L1} N E1 E2 E3 in
+   case TrenFinal of H|T then
+      N={ContarP H  Einicial.uno 0}
+      E1={AplicarMovimiento Einicial uno(~N)}
+      E2={AplicarMovimiento E1 dos(1)}
+      E3={AplicarMovimiento E2 uno(N-1)}
+      {Append
+       [uno(~N) dos(1) uno(N-1)]
+       {IterarTrenes E3 T L1}}
+   else
+      nil
+   end   
+end
+fun {ContarP Valor L N}
+   case L of H|T then
+      if Valor\=H then
+     {ContarP Valor T N+1}
+      else N+1  end
+   else 0 end
+end
+
+      S|nil
+   end
+end   
+fun{AplicarMovimiento S M} Trayecto LPrincipal LUno LDos NEstado in
+   Trayecto={Label M}%Captura la etiqueta del movimiento (uno o dos)
+   NEstado=estado(principal:
+LPrincipal  uno:LUno  dos:LDos)%Nuevo estado sin ligar
+   if Trayecto==uno then
+      LDos=S.dos %Se liga la lista del tren 2 puesto que no sufre cambios
+      if M.1<0 then    
+         %{Browse trayecto_uno_a_principal}
+     declare
+fun{AplicarMovimientos S Ms}
+  case Ms of H|T then
+      S|{AplicarMovimientos {AplicarMovimiento S H}  T}
+   else
+      S|nil
+   end
+end   
+fun{AplicarMovimiento S M} Trayecto LPrincipal LUno LDos NEstado in
+   Trayecto={Label M}%Captura la etiqueta del movimiento (uno o dos)
+   NEstado=estado(principal:
+LPrincipal  uno:LUno  dos:LDos)%Nuevo estado sin ligar
+   if Trayecto==uno then
+      LDos=S.dos %Se liga la lista del tren 2 puesto que no sufre cambios
+      if M.1<0 then    
+         %{Browse trayecto_uno_a_principal}
+     LPrincipal={MoveLeft S.principal S.uno LUno  ~M.1}
+      elseif M.1>0 then
+         %{Browse trayecto_principal_a_uno}
+     LUno={MoveRight S.principal S.uno LPrincipal M.1}
+      else NEstado=S %Para el caso del 0
+      end    
+   end
+   if Trayecto==dos then
+      LUno=S.uno %Se liga la lista del tren 1 puesto que no sufre cambios
+      if M.1<0 then    
+         %{Browse trayecto_dos_a_principal}
+     LPrincipal={MoveLeft S.principal S.dos LDos  ~M.1}
+      elseif M.1>0 then
+         %{Browse trayecto_principal_a_dos}
+     LDos={MoveRight S.principal S.dos LPrincipal M.1}
+      else NEstado=S %Para el caso del 0
+      end    
+   end   
+   NEstado %X es la variable con el nuevo estado  
+end
+fun {MoveLeft L1 L2 LAux M} L R in
+   L={Mover L1 L2 M LAux}
+   R={Append L1 L}
+end
+fun {Mover L1 L2 M LAux}
+   if M>0 then
+      case L2 of H|T then
+     H|{Mover L1 T M-1 LAux}
+      else
+     LAux=nil
+     nil
+      end
+   else
+      LAux=L2
+      nil      
+   end
+end
+fun {MoveRight L1 L2 LAux M } L Lo R Aux in   
+   L={Reverse L1}
+   Lo={Mover L2 L M Aux}  
+   LAux={Reverse Aux}
+   R={Append {Reverse Lo} L2}
+end
+fun {IterReverse Rs Ys}
+   case Ys of nil then Rs
+   [] Y|Yr then {IterReverse Y|Rs Yr}
+   end
+end
+fun {Reverse Xs}
+   {IterReverse nil Xs}
+end
+fun{TamanoL L}   
+   fun{Tam L N}
+      case L of nil then N
+      []H|T then {Tam T N+1}
+      end         
+   end
+in
+   {Tam L 0}
+end
+fun{Encontrar Tinicial Tfinal} Einicial Efinal N E X  L1 L2 L3 in
+   Einicial=estado(principal:Tinicial uno:nil dos:nil)
+   Efinal=estado(principal:Tfinal uno:nil dos:nil)
+   N={TamanoL Einicial.principal}
+   E={AplicarMovimiento Einicial uno(N)}
+   L1={Append nil [uno(N)]}%ESTA ES LA PRIMERA INSTRUCCIÓN PASAR TODO DE PRINCIPAL A UNO
+   X={IterarTrenes E {Reverse Efinal.principal} L1}
+   L2={Append L1 X}   
+   L3={Append L2 [dos(~N)]}%ESTA ES LA ULTIMA INSTRUCCIÓN PASAR TODO DE DOS A PRINCIPAL
+end
+fun{IterarTrenes Einicial TrenFinal L1} N E1 E2 E3 in
+   case TrenFinal of H|T then
+      N={ContarP H  Einicial.uno 0}
+      E1={AplicarMovimiento Einicial uno(~N)}
+      E2={AplicarMovimiento E1 dos(1)}
+      E3={AplicarMovimiento E2 uno(N-1)}
+      {Append
+       [uno(~N) dos(1) uno(N-1)]
+       {IterarTrenes E3 T L1}}
+   else
+      nil
+   end   
+end
+fun {ContarP Valor L N}
+   case L of H|T then
+      if Valor\=H then
+     {ContarP Valor T N+1}
+      else N+1  end
+   else 0 end
+end
+LPrincipal={MoveLeft S.principal S.uno LUno  ~M.1}
+      elseif M.1>0 then
+         %{Browse trayecto_principal_a_uno}
+     LUno={MoveRight S.principal S.uno LPrincipal M.1}
+      else NEstado=S %Para el caso del 0
+      end    
+   end
+   if Trayecto==dos then
+      LUno=S.uno %Se liga la lista del tren 1 puesto que no sufre cambios
+      if M.1<0 then    
+         %{Browse trayecto_dos_a_principal}
+     LPrincipal={MoveLeft S.principal S.dos LDos  ~M.1}
+      elseif M.1>0 then
+         %{Browse trayecto_principal_a_dos}
+     LDos={MoveRight S.principal S.dos LPrincipal M.1}
+      else NEstado=S %Para el caso del 0
+      end    
+   end   
+   NEstado %X es la variable con el nuevo estado  
+end
+fun {MoveLeft L1 L2 LAux M} L R in
+   L={Mover L1 L2 M LAux}
+   R={Append L1 L}
+end
+fun {Mover L1 L2 M LAux}
+   if M>0 then
+      case L2 of H|T then
+     H|{Mover L1 T M-1 LAux}
+      else
+     LAux=nil
+     nil
+      end
+   else
+      LAux=L2
+      nil      
+   end
+end
+fun {MoveRight L1 L2 LAux M } L Lo R Aux in   
+   L={Reverse L1}
+   Lo={Mover L2 L M Aux}  
+   LAux={Reverse Aux}
+   R={Append {Reverse Lo} L2}
+end
+fun {IterReverse Rs Ys}
+   case Ys of nil then Rs
+   [] Y|Yr then {IterReverse Y|Rs Yr}
+   end
+end
+fun {Reverse Xs}
+   {IterReverse nil Xs}
+end
+fun{TamanoL L}   
+   fun{Tam L N}
+      case L of nil then N
+      []H|T then {Tam T N+1}
+      end         
+   end
+in
+   {Tam L 0}
+end
+fun{Encontrar Tinicial Tfinal} Einicial Efinal N E X  L1 L2 L3 in
+   Einicial=estado(principal:Tinicial uno:nil dos:nil)
+   Efinal=estado(principal:Tfinal uno:nil dos:nil)
+   N={TamanoL Einicial.principal}
+   E={AplicarMovimiento Einicial uno(N)}
+   L1={Append nil [uno(N)]}%ESTA ES LA PRIMERA INSTRUCCIÓN PASAR TODO DE PRINCIPAL A UNO
+   X={IterarTrenes E {Reverse Efinal.principal} L1}
+   L2={Append L1 X}   
+   L3={Append L2 [dos(~N)]}%ESTA ES LA ULTIMA INSTRUCCIÓN PASAR TODO DE DOS A PRINCIPAL
+end
+fun{IterarTrenes Einicial TrenFinal L1} N E1 E2 E3 in
+   case TrenFinal of H|T then
+      N={ContarP H  Einicial.uno 0}
+      E1={AplicarMovimiento Einicial uno(~N)}
+      E2={AplicarMovimiento E1 dos(1)}
+      E3={AplicarMovimiento E2 uno(N-1)}
+      {Append
+       [uno(~N) dos(1) uno(N-1)]
+       {IterarTrenes E3 T L1}}
+   else
+      nil
+   end   
+end
+fun {ContarP Valor L N}
+   case L of H|T then
+      if Valor\=H then
+     {ContarP Valor T N+1}
+      else N+1  end
+   else 0 end
+end
